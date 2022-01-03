@@ -57,6 +57,11 @@ export class ConfigCheckerService implements OnModuleInit {
   checkConfirmNumber(): void {
     this.checkConfigParameters(`CONFIRM_BLOCK_AFTER`);
   }
+  checkNotification(): void {
+    this.checkConfigParameters(`NOTIFICATIN_MS_URL`);
+    this.checkConfigParameters(`NOTIFICATION_CHANNEL_NAME`);
+    this.checkConfigParameters(`NOTIFICATION_BOT_ICON`);
+  }
   checkConfigParameters(name: string): void {
     const param = this.config.get(name);
     if (!param?.length) {
