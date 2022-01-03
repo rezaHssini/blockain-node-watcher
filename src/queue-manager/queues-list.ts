@@ -1,3 +1,3 @@
-import { BullModuleOptions } from '@nestjs/bull';
+import { BullModuleOptions } from "@nestjs/bull";
 
 export const queuesList: BullModuleOptions[] = [];

@@ -1,3 +1,5 @@
 export class NotificationsServiceMock {
-  async send(message: any): Promise<void> {}
+  async send(message: any): Promise<void> {
+    return message;
+  }
 }

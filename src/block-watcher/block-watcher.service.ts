@@ -1,4 +1,3 @@
-import { Job } from "bull";
 import { HttpService } from "@nestjs/axios";
 import { ConfigService } from "@nestjs/config";
 import { CatchErrorWithSentry } from "../mixins/decorators/catch-error-with-sentry";
@@ -36,7 +35,7 @@ export class BlockWatcher {
       DEFAULT_BLOCK_SCANNER_INTERVAL_MS,
   })
   @CatchErrorWithSentry()
-  async checkLatestBlocks(job: Job<object>): Promise<void> {
+  async checkLatestBlocks(): Promise<void> {
     const alert = await this.getBlockStatsAlerts();
     await this.sendAlerts(alert);
   }
@@ -46,7 +45,7 @@ export class BlockWatcher {
   > {
     const serviceBlockStat = await this.getServiceBlockStats();
     const balancerBlockStat = await this.getServiceBalancerBlockStats();
-    var response = {};
+    const response = {};
     Object.keys(serviceBlockStat).forEach((key: keyof IBlockStat) => {
       const value = this.difference(
         balancerBlockStat[key],

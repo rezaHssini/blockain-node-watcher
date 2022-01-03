@@ -1,9 +1,11 @@
-import { getQueueToken } from '@nestjs/bull';
-import { Provider } from '@nestjs/common';
-import { Job, Queue } from 'bull';
+import { getQueueToken } from "@nestjs/bull";
+import { Provider } from "@nestjs/common";
+import { Job, Queue } from "bull";
 
 export class QueueMock implements Partial<Queue> {
-  async process(...args: any[]): Promise<void> {}
+  async process(...args: any[]): Promise<any> {
+    return args;
+  }
   async add(): Promise<Job> {
     return {} as unknown as Job;
   }
@@ -13,9 +15,12 @@ export class QueueMock implements Partial<Queue> {
   async getWaiting(): Promise<Job[]> {
     return [];
   }
-  async empty(): Promise<void> {}
+  async empty(): Promise<void> {
+    return;
+  }
 
-  on(event, callvack): Queue<any> {
+  on(event, callback): Queue<any> {
+    callback(event);
     return this as unknown as Queue<any>;
   }
 }

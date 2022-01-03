@@ -1,11 +1,18 @@
-import { Inject, Optional } from '@nestjs/common';
-import { SentryService } from '@ntegral/nestjs-sentry';
-import { AsyncMethodDecorator } from '../interfaces/async-method-decorator';
+import { Inject, Optional } from "@nestjs/common";
+import { SentryService } from "@ntegral/nestjs-sentry";
+import { AsyncMethodDecorator } from "../interfaces/async-method-decorator";
 
-export function CatchErrorWithSentry(sentryInstanceKey = '__sentry', bubble = true): AsyncMethodDecorator {
+export function CatchErrorWithSentry(
+  sentryInstanceKey = "__sentry",
+  bubble = true
+): AsyncMethodDecorator {
   const injectLogger = Inject(SentryService);
 
-  return (target: any, propertyKey: string, propertyDescriptor: PropertyDescriptor) => {
+  return (
+    target: any,
+    propertyKey: string,
+    propertyDescriptor: PropertyDescriptor
+  ) => {
     if (!target[sentryInstanceKey]) {
       try {
         injectLogger(target, sentryInstanceKey);
@@ -17,13 +24,14 @@ export function CatchErrorWithSentry(sentryInstanceKey = '__sentry', bubble = tr
     const originalMethod = propertyDescriptor.value;
 
     // redefine descriptor value within own function block
-    propertyDescriptor.value = async function(...args: any[]): Promise<any> {
+    propertyDescriptor.value = async function (...args: any[]): Promise<any> {
       try {
         return await originalMethod.apply(this, args);
       } catch (error) {
         const sentry: SentryService = this[sentryInstanceKey];
-        const targetName = typeof target === 'function' ? target.name : target.constructor.name;
-        error = typeof error === 'string' ? new Error(error) : error;
+        const targetName =
+          typeof target === "function" ? target.name : target.constructor.name;
+        error = typeof error === "string" ? new Error(error) : error;
         error.message = `${targetName}::${propertyKey} ${error.message}`;
         if (sentry) {
           // TODO: send to sentry

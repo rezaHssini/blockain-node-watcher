@@ -1,4 +1,4 @@
-export const QUEUE_MANAGER_PROCESSOR = Symbol('QUEUE_MANAGER_PROCESSOR');
-export const REPEATED_TASK_META = Symbol('REPEATED_TASK_META');
-export const JOB_PROCESS_META = Symbol('REPEATED_TASK_META');
-export const JOB_LOCKER = Symbol('JOB_LOCKER');
+export const QUEUE_MANAGER_PROCESSOR = Symbol("QUEUE_MANAGER_PROCESSOR");
+export const REPEATED_TASK_META = Symbol("REPEATED_TASK_META");
+export const JOB_PROCESS_META = Symbol("REPEATED_TASK_META");
+export const JOB_LOCKER = Symbol("JOB_LOCKER");

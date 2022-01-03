@@ -1,7 +1,7 @@
-import { HttpModule } from '@nestjs/axios';
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { NotificationsService } from './notifications.service';
+import { HttpModule } from "@nestjs/axios";
+import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { NotificationsService } from "./notifications.service";
 
 @Module({
   imports: [HttpModule, ConfigModule],
