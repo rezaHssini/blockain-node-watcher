@@ -6,7 +6,7 @@ import { NotificationsServiceMock } from "./../src/testing-mocks/notifications/n
 import { QueueManagerService } from "./../src/queue-manager/queue-manager.service";
 import { BlockWatcher } from "./../src/block-watcher/block-watcher.service";
 
-describe("AppController (e2e)", () => {
+describe("Block Watcher service (e2e)", () => {
   let app: INestApplication;
   let queueManager: QueueManagerService;
   let blockWatcher: BlockWatcher;
@@ -46,6 +46,35 @@ describe("AppController (e2e)", () => {
     );
     setTimeout(() => {
       expect(spyOnService).toBeCalled();
+      done();
+    }, 8000);
+    jest.advanceTimersByTime(8000);
+  }, 10000);
+
+  it("should call send notification", (done) => {
+    const spyOnService = jest.spyOn(NotificationsServiceMock.prototype, "send");
+    jest.spyOn(blockWatcher, "getServiceBlockStats").mockResolvedValue(
+      Promise.resolve({
+        pending: 25,
+        new: 50,
+        last: 123456789,
+        fetched: 30,
+        confirmed: 20,
+      })
+    );
+    jest.spyOn(blockWatcher, "getServiceBalancerBlockStats").mockResolvedValue(
+      Promise.resolve({
+        pending: 0,
+        new: 0,
+        last: 123456788,
+        fetched: 0,
+        confirmed: 0,
+      })
+    );
+    setTimeout(() => {
+      expect(spyOnService).toBeCalledWith(
+        "eth : pending distance value is bigger than expected"
+      );
       done();
     }, 8000);
     jest.advanceTimersByTime(8000);

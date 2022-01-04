@@ -6,5 +6,6 @@ export function blockStatMaker(latestBlock: number): IBlockStat {
     new: 0,
     last: latestBlock,
     fetched: 0,
+    confirmed: 0,
   };
 }

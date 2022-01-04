@@ -17,6 +17,8 @@ const testData = {
   NOTIFICATIN_MS_URL: "test-url",
   NOTIFICATION_CHANNEL_NAME: "test-channel-name",
   NOTIFICATION_BOT_ICON: "test-bot-icon",
+  CONFIRMED_MIN_DISTANCE: "0",
+  CONFIRMED_MAX_DISTANCE: "20",
 };
 
 describe("ConfigCheckerService", () => {
