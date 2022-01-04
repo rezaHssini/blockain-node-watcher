@@ -1,0 +1,17 @@
+# For local development
+
+version: '3'
+
+services:
+  bcw-redis:
+    container_name: bcw-redis
+    image: redis:latest
+    expose:
+      - 6379
+    ports:
+      - '6379:6379'
+    networks:
+      - bc-watcher
+networks:
+  bc-watcher:
+    name: bc-watcher
