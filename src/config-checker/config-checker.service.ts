@@ -30,6 +30,7 @@ export class ConfigCheckerService implements OnModuleInit {
       this.checkServiceAddress();
       this.checkBalancerAddress();
       this.checkLimits();
+      this.checkNotification();
     } catch (error) {
       console.log(error);
       process.exit(1);
@@ -49,14 +50,11 @@ export class ConfigCheckerService implements OnModuleInit {
     });
   }
   checkCoinName(): void {
-    if (COIN_NAME?.length === 0) {
+    if (COIN_NAME?.length === 0 || COIN_NAME == "notSet") {
       const error = `COIN_NAME didint set`;
       this.logger.error(error);
       throw new Error(error);
     }
-  }
-  checkConfirmNumber(): void {
-    this.checkConfigParameters(`CONFIRM_BLOCK_AFTER`);
   }
   checkNotification(): void {
     this.checkConfigParameters(`NOTIFICATIN_MS_URL`);
