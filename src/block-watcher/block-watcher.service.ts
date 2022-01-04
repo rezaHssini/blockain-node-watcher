@@ -57,11 +57,23 @@ export class BlockWatcher {
 
   async getServiceBlockStats(): Promise<IBlockStat> {
     const url = this.getServiceAddress();
-    return await request(this.http, url);
+    try {
+      return await request(this.http, url);
+    } catch (error) {
+      await this.notification.send(error?.message);
+    }
   }
   async getServiceBalancerBlockStats(): Promise<IBlockStat> {
     const url = this.getServiceBalancerAddress();
-    const response = await request(this.http, url);
+    let response;
+    try {
+      response = await request(this.http, url);
+    } catch (error) {
+      await this.notification.send(error?.message);
+    }
+    if (!response) {
+      throw new Error("Error in get last block");
+    }
     return blockStatMaker(response.lastBlock);
   }
 
