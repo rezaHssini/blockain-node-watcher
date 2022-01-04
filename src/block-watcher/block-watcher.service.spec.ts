@@ -86,7 +86,7 @@ describe("BlockWatcher", () => {
 
   it("should return service address", () => {
     const result = service.getServiceAddress();
-    expect(result).toBe(testData.SERVICE_ADDRESS + "/notSet/block/stats");
+    expect(result).toBe(testData.SERVICE_ADDRESS + "/eth/block/stats");
   });
 
   it("should return service balancer address", () => {

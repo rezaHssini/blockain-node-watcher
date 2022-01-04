@@ -2,9 +2,7 @@ import { firstValueFrom } from "rxjs";
 
 export async function request(http, url): Promise<any> {
   if (!url) {
-    throw new Error(
-      "Can't send change transaction notification: URL is unknown."
-    );
+    throw new Error("Can't send request: URL is unknown.");
   }
   let response;
   const response$ = http.get(url);
@@ -17,7 +15,7 @@ export async function request(http, url): Promise<any> {
   }
   if (response.status > 400) {
     throw new Error(
-      `Failed to send http request: ${response.status} ${response.statusText}`
+      `${url} - Failed to send http request: ${response.status} ${response.statusText}`
     );
   }
   return response.data;
