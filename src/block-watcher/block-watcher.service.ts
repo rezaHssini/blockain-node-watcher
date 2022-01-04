@@ -40,9 +40,7 @@ export class BlockWatcher {
     await this.sendAlerts(alert);
   }
 
-  private async getBlockStatsAlerts(): Promise<
-    Partial<IBlockStatsAlertMessages>
-  > {
+  async getBlockStatsAlerts(): Promise<Partial<IBlockStatsAlertMessages>> {
     const serviceBlockStat = await this.getServiceBlockStats();
     const balancerBlockStat = await this.getServiceBalancerBlockStats();
     const response = {};
@@ -57,25 +55,25 @@ export class BlockWatcher {
     return response;
   }
 
-  private async getServiceBlockStats(): Promise<IBlockStat> {
+  async getServiceBlockStats(): Promise<IBlockStat> {
     const url = this.getServiceAddress();
     return await request(this.http, url);
   }
-  private async getServiceBalancerBlockStats(): Promise<IBlockStat> {
+  async getServiceBalancerBlockStats(): Promise<IBlockStat> {
     const url = this.getServiceBalancerAddress();
     const response = await request(this.http, url);
     return blockStatMaker(response.lastBlock);
   }
 
-  private getServiceAddress(): string {
+  getServiceAddress(): string {
     return `${this.config.get(
       SERVICE_ADDRESS
     )}/${COIN_NAME}${SERVICE_ADDRESS_PATH}`;
   }
-  private getServiceBalancerAddress(): string {
+  getServiceBalancerAddress(): string {
     return this.config.get(SERVICE_BALANCER_ADDRESS) + BALANCER_ADDRESS_PATH;
   }
-  private compare(value: number, min: number, max: number): string | null {
+  compare(value: number, min: number, max: number): string | null {
     if (value < min) {
       return "distance value is lower than expected";
     }
@@ -84,13 +82,10 @@ export class BlockWatcher {
     }
     return null;
   }
-  private difference(a: number, b: number): number {
+  difference(a: number, b: number): number {
     return Math.abs(a - b);
   }
-  private async sendAlerts(
-    alert: Partial<IBlockStatsAlertMessages>
-  ): Promise<void> {
-    console.log(alert);
+  async sendAlerts(alert: Partial<IBlockStatsAlertMessages>): Promise<void> {
     if (!alert) {
       return;
     }
