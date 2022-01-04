@@ -20,6 +20,8 @@ const testData = {
   NEW_MAX_DISTANCE: "10",
   FETCHED_MIN_DISTANCE: "0",
   FETCHED_MAX_DISTANCE: "20",
+  CONFIRMED_MIN_DISTANCE: "0",
+  CONFIRMED_MAX_DISTANCE: "20",
 };
 
 describe("BlockWatcher", () => {
@@ -97,16 +99,24 @@ describe("BlockWatcher", () => {
   });
 
   it("should dont have any error", async () => {
-    jest
-      .spyOn(service, "getServiceBlockStats")
-      .mockResolvedValue(
-        Promise.resolve({ pending: 0, new: 0, last: 50, fetched: 0 })
-      );
-    jest
-      .spyOn(service, "getServiceBalancerBlockStats")
-      .mockResolvedValue(
-        Promise.resolve({ pending: 0, new: 0, last: 50, fetched: 0 })
-      );
+    jest.spyOn(service, "getServiceBlockStats").mockResolvedValue(
+      Promise.resolve({
+        pending: 0,
+        new: 0,
+        last: 50,
+        fetched: 0,
+        confirmed: 0,
+      })
+    );
+    jest.spyOn(service, "getServiceBalancerBlockStats").mockResolvedValue(
+      Promise.resolve({
+        pending: 0,
+        new: 0,
+        last: 50,
+        fetched: 0,
+        confirmed: 0,
+      })
+    );
 
     const result = await service.getBlockStatsAlerts();
     expect(result).toStrictEqual({
@@ -114,20 +124,29 @@ describe("BlockWatcher", () => {
       last: null,
       new: null,
       pending: null,
+      confirmed: null,
     });
   });
 
   it("should have error", async () => {
-    jest
-      .spyOn(service, "getServiceBlockStats")
-      .mockResolvedValue(
-        Promise.resolve({ pending: 0, new: 0, last: 40, fetched: 0 })
-      );
-    jest
-      .spyOn(service, "getServiceBalancerBlockStats")
-      .mockResolvedValue(
-        Promise.resolve({ pending: 0, new: 0, last: 50, fetched: 0 })
-      );
+    jest.spyOn(service, "getServiceBlockStats").mockResolvedValue(
+      Promise.resolve({
+        pending: 0,
+        new: 0,
+        last: 40,
+        fetched: 0,
+        confirmed: 0,
+      })
+    );
+    jest.spyOn(service, "getServiceBalancerBlockStats").mockResolvedValue(
+      Promise.resolve({
+        pending: 0,
+        new: 0,
+        last: 50,
+        fetched: 0,
+        confirmed: 0,
+      })
+    );
 
     const result = await service.getBlockStatsAlerts();
     expect(result).toStrictEqual({
@@ -135,20 +154,29 @@ describe("BlockWatcher", () => {
       last: "distance value is bigger than expected",
       new: null,
       pending: null,
+      confirmed: null,
     });
   });
 
   it("should have error", async () => {
-    jest
-      .spyOn(service, "getServiceBlockStats")
-      .mockResolvedValue(
-        Promise.resolve({ pending: 0, new: 0, last: 50, fetched: 0 })
-      );
-    jest
-      .spyOn(service, "getServiceBalancerBlockStats")
-      .mockResolvedValue(
-        Promise.resolve({ pending: 0, new: 30, last: 50, fetched: 0 })
-      );
+    jest.spyOn(service, "getServiceBlockStats").mockResolvedValue(
+      Promise.resolve({
+        pending: 0,
+        new: 0,
+        last: 50,
+        fetched: 0,
+        confirmed: 0,
+      })
+    );
+    jest.spyOn(service, "getServiceBalancerBlockStats").mockResolvedValue(
+      Promise.resolve({
+        pending: 0,
+        new: 30,
+        last: 50,
+        fetched: 0,
+        confirmed: 0,
+      })
+    );
 
     const result = await service.getBlockStatsAlerts();
     expect(result).toStrictEqual({
@@ -156,20 +184,29 @@ describe("BlockWatcher", () => {
       last: null,
       new: "distance value is bigger than expected",
       pending: null,
+      confirmed: null,
     });
   });
 
   it("should have error", async () => {
-    jest
-      .spyOn(service, "getServiceBlockStats")
-      .mockResolvedValue(
-        Promise.resolve({ pending: 0, new: 0, last: 50, fetched: 0 })
-      );
-    jest
-      .spyOn(service, "getServiceBalancerBlockStats")
-      .mockResolvedValue(
-        Promise.resolve({ pending: 30, new: 0, last: 50, fetched: 0 })
-      );
+    jest.spyOn(service, "getServiceBlockStats").mockResolvedValue(
+      Promise.resolve({
+        pending: 0,
+        new: 0,
+        last: 50,
+        fetched: 0,
+        confirmed: 0,
+      })
+    );
+    jest.spyOn(service, "getServiceBalancerBlockStats").mockResolvedValue(
+      Promise.resolve({
+        pending: 30,
+        new: 0,
+        last: 50,
+        fetched: 0,
+        confirmed: 0,
+      })
+    );
 
     const result = await service.getBlockStatsAlerts();
     expect(result).toStrictEqual({
@@ -177,20 +214,29 @@ describe("BlockWatcher", () => {
       last: null,
       new: null,
       pending: "distance value is bigger than expected",
+      confirmed: null,
     });
   });
 
   it("should have error", async () => {
-    jest
-      .spyOn(service, "getServiceBlockStats")
-      .mockResolvedValue(
-        Promise.resolve({ pending: 0, new: 0, last: 50, fetched: 0 })
-      );
-    jest
-      .spyOn(service, "getServiceBalancerBlockStats")
-      .mockResolvedValue(
-        Promise.resolve({ pending: 0, new: 0, last: 50, fetched: 30 })
-      );
+    jest.spyOn(service, "getServiceBlockStats").mockResolvedValue(
+      Promise.resolve({
+        pending: 0,
+        new: 0,
+        last: 50,
+        fetched: 0,
+        confirmed: 0,
+      })
+    );
+    jest.spyOn(service, "getServiceBalancerBlockStats").mockResolvedValue(
+      Promise.resolve({
+        pending: 0,
+        new: 0,
+        last: 50,
+        fetched: 30,
+        confirmed: 0,
+      })
+    );
 
     const result = await service.getBlockStatsAlerts();
     expect(result).toStrictEqual({
@@ -198,6 +244,37 @@ describe("BlockWatcher", () => {
       last: null,
       new: null,
       pending: null,
+      confirmed: null,
+    });
+  });
+
+  it("should have error", async () => {
+    jest.spyOn(service, "getServiceBlockStats").mockResolvedValue(
+      Promise.resolve({
+        pending: 0,
+        new: 0,
+        last: 50,
+        fetched: 0,
+        confirmed: 0,
+      })
+    );
+    jest.spyOn(service, "getServiceBalancerBlockStats").mockResolvedValue(
+      Promise.resolve({
+        pending: 0,
+        new: 0,
+        last: 50,
+        fetched: 0,
+        confirmed: 30,
+      })
+    );
+
+    const result = await service.getBlockStatsAlerts();
+    expect(result).toStrictEqual({
+      fetched: null,
+      last: null,
+      new: null,
+      pending: null,
+      confirmed: "distance value is bigger than expected",
     });
   });
 });

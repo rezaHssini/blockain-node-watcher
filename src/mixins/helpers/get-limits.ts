@@ -7,7 +7,7 @@ export function getLimits(
 ): { min: number; max: number } {
   const normalizedKey = key.toUpperCase();
   return {
-    min: +config.get(`${normalizedKey}_MIN_DISTANCE`) | 0,
-    max: +config.get(`${normalizedKey}_MAX_DISTANCE`) | 0,
+    min: +config.get(`${normalizedKey}_MIN_DISTANCE`) || 0,
+    max: +config.get(`${normalizedKey}_MAX_DISTANCE`) || 0,
   };
 }
