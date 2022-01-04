@@ -13,6 +13,7 @@ const IBlockStatKeys: KeysEnum<IBlockStat> = {
   fetched: true,
   last: true,
   new: true,
+  confirmed: true,
 };
 
 @Injectable()

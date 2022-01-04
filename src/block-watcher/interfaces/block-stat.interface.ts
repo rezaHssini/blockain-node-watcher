@@ -3,4 +3,5 @@ export interface IBlockStat {
   new: number;
   last: number;
   fetched: number;
+  confirmed: number;
 }
