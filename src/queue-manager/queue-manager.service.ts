@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-types */
 // Based on https://github.com/nestjs/bull/blob/master/lib/bull.explorer.ts
-
 import {
   getQueueToken,
   BullModuleOptions,
@@ -36,11 +34,9 @@ export class QueueManagerService implements OnModuleInit {
     private readonly metadataScanner: MetadataScanner,
     @Inject(JOB_LOCKER) private readonly jobLocker: JobLocker
   ) {}
-
   onModuleInit(): void {
     this.explore();
   }
-
   explore(): void {
     const providers: InstanceWrapper[] = this.discoveryService
       .getProviders()
@@ -73,12 +69,9 @@ export class QueueManagerService implements OnModuleInit {
     isRequestScoped: boolean
   ): void {
     const module = wrapper.host;
-
     const instance = wrapper.instance;
-
     if (this.isScheduledProcess(instance, key)) {
       const options = this.getScheduleOptions(instance, key);
-
       this.handleScheduledProcessor(
         instance,
         key,
@@ -89,7 +82,6 @@ export class QueueManagerService implements OnModuleInit {
       );
     } else if (this.isProcessHandler(instance, key)) {
       const options = this.getProcessOptions(instance, key);
-
       this.handleProcessor(
         instance,
         key,
@@ -100,7 +92,6 @@ export class QueueManagerService implements OnModuleInit {
       );
     }
   }
-
   isScheduledProcess(instance: object, key: string): boolean {
     return !!this.getScheduleOptions(instance, key);
   }
@@ -117,7 +108,6 @@ export class QueueManagerService implements OnModuleInit {
 
   getQueueName(providerConstructor: AnyFn | Type<any>): string | undefined {
     const config = this.getQueueConfig(providerConstructor);
-
     return config && typeof config === "string" ? config : config.name;
   }
 
@@ -154,7 +144,6 @@ export class QueueManagerService implements OnModuleInit {
       moduleRef,
       isRequestScoped
     );
-
     this.addProcessorToQueue(queue, callback, options);
   }
 
@@ -174,9 +163,7 @@ export class QueueManagerService implements OnModuleInit {
       queue.name,
       options.expirationTime
     );
-
     this.addProcessorToQueue(queue, callback, options);
-
     this.scheduleRepeated(queue, options.name, options.interval).catch((err) =>
       this.logger.error(err)
     );
@@ -195,14 +182,12 @@ export class QueueManagerService implements OnModuleInit {
       );
       return;
     }
-
     const callback = this.getQueueListenerCallback(
       instance,
       key,
       queue,
       options
     );
-
     queue.on(options.eventName, callback);
   }
 
@@ -215,7 +200,6 @@ export class QueueManagerService implements OnModuleInit {
     if (!options.name && !options.id) {
       return instance[key].bind(instance);
     }
-
     return async (jobOrJobId: Job | string, ...args: unknown[]) => {
       const job =
         typeof jobOrJobId === "string"
@@ -252,7 +236,6 @@ export class QueueManagerService implements OnModuleInit {
       moduleRef,
       isRequestScoped
     );
-
     return async (...args: unknown[]) => {
       let result;
       let error;
@@ -260,7 +243,6 @@ export class QueueManagerService implements OnModuleInit {
       if (!lockId) {
         return;
       }
-
       try {
         result = await callback(...args);
       } catch (e) {
@@ -310,25 +292,46 @@ export class QueueManagerService implements OnModuleInit {
       moduleRef.providers,
       contextId
     );
-
     return contextInstance[key].call(contextInstance, ...args);
   }
-
   async scheduleRepeated(
     queue: Queue,
     name: string,
-    every: number,
+    interval: number,
     unique = true
   ): Promise<void> {
     const opts: JobOptions = {
-      repeat: { every },
-      removeOnFail: true,
+      repeat: { every: interval },
       removeOnComplete: true,
+      removeOnFail: true,
     };
-
     if (unique) {
       opts.jobId = `queue-test-${name}`;
     }
     await queue.add(name, {}, opts);
+  }
+
+  async cleanJobsInQueue(queueName: string): Promise<void> {
+    const queueToken = getQueueToken(queueName);
+    const bullQueue = this.getQueue(queueToken);
+    await bullQueue.clean(10);
+  }
+
+  async clearJobsInAllQueues(): Promise<void> {
+    const providers: InstanceWrapper[] = this.discoveryService
+      .getProviders()
+      .filter(
+        (wrapper: InstanceWrapper) =>
+          wrapper.metatype && this.getQueueConfig(wrapper.metatype as AnyFn)
+      );
+    await Promise.all(providers.map((w) => this.handleQueueCleaner(w)));
+  }
+
+  private async handleQueueCleaner(wrapper: InstanceWrapper): Promise<void> {
+    const { metatype } = wrapper;
+    const queueName = this.getQueueName(metatype as AnyFn);
+    const queueToken = getQueueToken(queueName);
+    const bullQueue = this.getQueue(queueToken);
+    await bullQueue.clean(10);
   }
 }
