@@ -12,7 +12,6 @@ export class BlockWatcher {
   async check(chain: string): Promise<void> {
     const watcher = this.getWatcher(chain);
     const alerts = await watcher.getBlockStatsAlerts();
-    console.log(chain, alerts);
     await watcher.sendAlerts(alerts);
   }
 
