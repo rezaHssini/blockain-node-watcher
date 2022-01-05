@@ -1,1 +1,1 @@
-export const COIN_NAME = process.env.COIN_NAME || "eth";
+export const BLOCKCHAIN_WATCHER = Symbol("BLOCKCHAIN_WATCHER");
