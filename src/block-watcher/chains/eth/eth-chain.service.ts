@@ -1,10 +1,12 @@
 import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { SetLimits } from "../../../mixins/helpers/limit-config";
 import { BlockchainWatcher } from "../../../mixins/decorators/blockchain-watcher.decorator";
 import { NotificationsService } from "../../../notifications/notifications.service";
 import { BlockWatcherBaseClass } from "../../base-class/watcher-base-class";
 import { Chain } from "../../enums/chain.enum";
+import { LimitsConfiguration } from "../../enums/limit-configuration.enum";
 
 @Injectable()
 @BlockchainWatcher(Chain.ETH)
@@ -12,13 +14,7 @@ export class EthChainService extends BlockWatcherBaseClass {
   chain = Chain.ETH;
   serviceUri = "";
   balancerUri = "";
-  limits = {
-    PENDING_MAX_DISTANCE: 5,
-    NEW_MAX_DISTANCE: 5,
-    LAST_MAX_DISTANCE: 5,
-    FETCHED_MAX_DISTANCE: 5,
-    CONFIRMED_MAX_DISTANCE: 5,
-  };
+  limits = null;
   constructor(
     http: HttpService,
     notification: NotificationsService,
@@ -31,5 +27,6 @@ export class EthChainService extends BlockWatcherBaseClass {
     this.balancerUri = config.get<string>(
       `${this.chain.toUpperCase()}_BALANCER_ADDRESS`
     );
+    this.limits = SetLimits(LimitsConfiguration.ReadFromConfig, config);
   }
 }

@@ -23,6 +23,9 @@ export abstract class BlockWatcherBaseClass implements IBlockWatcher {
   async getBlockStatsAlerts(): Promise<Partial<IBlockStatsAlertMessages>> {
     const serviceBlockStat = await this.getServiceBlockStats();
     const balancerBlockStat = await this.getServiceBalancerBlockStats();
+    if (!serviceBlockStat || !balancerBlockStat) {
+      throw new Error(`Error in fetch ${this.chain} network data`);
+    }
     const response = {};
     Object.keys(serviceBlockStat).forEach((key: keyof IBlockStat) => {
       const value = this.difference(
@@ -52,7 +55,7 @@ export abstract class BlockWatcherBaseClass implements IBlockWatcher {
       await this.notification.send(error?.message);
     }
     if (!response) {
-      throw new Error("Error in get last block");
+      throw new Error(`Error in get ${this.chain} last block`);
     }
     return blockStatMaker(response.lastBlock);
   }
