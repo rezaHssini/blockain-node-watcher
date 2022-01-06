@@ -1,17 +1,17 @@
 import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { SetLimits } from "../../mixins/helpers/limit-config";
-import { BlockchainWatcher } from "../../mixins/decorators/blockchain-watcher.decorator";
-import { NotificationsService } from "../../notifications/notifications.service";
-import { BlockWatcherBaseClass } from "../base-class/watcher-base-class";
-import { Chain } from "../enums/chain.enum";
-import { LimitsConfiguration } from "../enums/limit-configuration.enum";
+import { SetLimits } from "../../../mixins/helpers/limit-config";
+import { BlockchainWatcher } from "../../../mixins/decorators/blockchain-watcher.decorator";
+import { NotificationsService } from "../../../notifications/notifications.service";
+import { BlockWatcherBaseClass } from "../../base-class/watcher-base-class";
+import { Chain } from "../../enums/chain.enum";
+import { LimitsConfiguration } from "../../enums/limit-configuration.enum";
 
 @Injectable()
-@BlockchainWatcher(Chain.TRX)
-export class TrxChainService extends BlockWatcherBaseClass {
-  chain = Chain.TRX;
+@BlockchainWatcher(Chain.DASH)
+export class DashChainService extends BlockWatcherBaseClass {
+  chain = Chain.DASH;
   serviceUri = "";
   balancerUri = "";
   limits = null;

@@ -3,7 +3,6 @@ import { BLOCKCHAIN_WATCHER } from "../mixins/constants";
 import { getInstanceMetadataValue } from "../mixins/helpers/metadata";
 import { IBlockWatcher } from "../mixins/interfaces/blockchain-watcher.interface";
 import { ServiceExplorerService } from "../service-explorer/service-explorer.service";
-import { Chain } from "./enums/chain.enum";
 
 @Injectable()
 export class BlockWatcher {

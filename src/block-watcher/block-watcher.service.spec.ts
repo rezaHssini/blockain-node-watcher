@@ -1,46 +1,90 @@
-import { ConfigService } from "@nestjs/config";
-import { HttpModule } from "@nestjs/axios";
 import { Test, TestingModule } from "@nestjs/testing";
-import { NotificationsService } from "../notifications/notifications.service";
-import { NotificationsServiceMock } from "../testing-mocks/notifications/notifications.service.mock";
-import { Config } from "../testing-mocks/queue/config";
 import { BlockWatcher } from "./block-watcher.service";
-import { QueueMock } from "../testing-mocks/queue/queue.mock";
-import { getQueueToken } from "@nestjs/bull";
-import { BLOCK_SCANNER_QUEUE_NAME } from "./constants";
 import { ServiceExplorerModule } from "../service-explorer/service-explorer.module";
+import { Chain } from "./enums/chain.enum";
+import { BlockchainWatcher } from "../mixins/decorators/blockchain-watcher.decorator";
+import { IBlockStatsAlertMessages } from "./interfaces/block-alert-messages.interface";
 
-const testData = {
-  SERVICE_BALANCER_ADDRESS: "test-balancer-address",
-  SERVICE_ADDRESS: "test-service-address",
-  LAST_MIN_DISTANCE: "0",
-  LAST_MAX_DISTANCE: "1",
-  PENDING_MIN_DISTANCE: "0",
-  PENDING_MAX_DISTANCE: "15",
-  NEW_MIN_DISTANCE: "0",
-  NEW_MAX_DISTANCE: "10",
-  FETCHED_MIN_DISTANCE: "0",
-  FETCHED_MAX_DISTANCE: "20",
-  CONFIRMED_MIN_DISTANCE: "0",
-  CONFIRMED_MAX_DISTANCE: "20",
-};
+@BlockchainWatcher(Chain.ETH)
+class EthBlockWatcherTest {
+  async getBlockStatsAlerts(): Promise<Partial<IBlockStatsAlertMessages>> {
+    return {};
+  }
+  async sendAlerts(alert: Partial<IBlockStatsAlertMessages>): Promise<void> {
+    console.log(alert);
+  }
+}
+@BlockchainWatcher(Chain.BTC)
+class BtcBlockWatcherTest {
+  async getBlockStatsAlerts(): Promise<Partial<IBlockStatsAlertMessages>> {
+    return {};
+  }
+  async sendAlerts(alert: Partial<IBlockStatsAlertMessages>): Promise<void> {
+    console.log(alert);
+  }
+}
+@BlockchainWatcher(Chain.LTC)
+class LtcBlockWatcherTest {
+  async getBlockStatsAlerts(): Promise<Partial<IBlockStatsAlertMessages>> {
+    return {};
+  }
+  async sendAlerts(alert: Partial<IBlockStatsAlertMessages>): Promise<void> {
+    console.log(alert);
+  }
+}
+@BlockchainWatcher(Chain.DASH)
+class DashBlockWatcherTest {
+  async getBlockStatsAlerts(): Promise<Partial<IBlockStatsAlertMessages>> {
+    return {};
+  }
+  async sendAlerts(alert: Partial<IBlockStatsAlertMessages>): Promise<void> {
+    console.log(alert);
+  }
+}
+@BlockchainWatcher(Chain.DOT)
+class DotBlockWatcherTest {
+  async getBlockStatsAlerts(): Promise<Partial<IBlockStatsAlertMessages>> {
+    return {};
+  }
+  async sendAlerts(alert: Partial<IBlockStatsAlertMessages>): Promise<void> {
+    console.log(alert);
+  }
+}
+@BlockchainWatcher(Chain.TRX)
+class TrxBlockWatcherTest {
+  async getBlockStatsAlerts(): Promise<Partial<IBlockStatsAlertMessages>> {
+    return {};
+  }
+  async sendAlerts(alert: Partial<IBlockStatsAlertMessages>): Promise<void> {
+    console.log(alert);
+  }
+}
+@BlockchainWatcher(Chain.XRP)
+class XrpBlockWatcherTest {
+  async getBlockStatsAlerts(): Promise<Partial<IBlockStatsAlertMessages>> {
+    return {};
+  }
+  async sendAlerts(alert: Partial<IBlockStatsAlertMessages>): Promise<void> {
+    console.log(alert);
+  }
+}
 
 describe("BlockWatcher", () => {
   let service: BlockWatcher;
-  Config.data = testData;
   beforeEach(async () => {
     jest.clearAllTimers();
 
     const module: TestingModule = await Test.createTestingModule({
-      imports: [HttpModule, ServiceExplorerModule],
+      imports: [ServiceExplorerModule],
       providers: [
         BlockWatcher,
-        { provide: ConfigService, useClass: Config },
-        { provide: NotificationsService, useClass: NotificationsServiceMock },
-        {
-          provide: getQueueToken(BLOCK_SCANNER_QUEUE_NAME),
-          useClass: QueueMock,
-        },
+        EthBlockWatcherTest,
+        BtcBlockWatcherTest,
+        LtcBlockWatcherTest,
+        DashBlockWatcherTest,
+        DotBlockWatcherTest,
+        TrxBlockWatcherTest,
+        XrpBlockWatcherTest,
       ],
     }).compile();
 
@@ -49,5 +93,67 @@ describe("BlockWatcher", () => {
 
   it("should be defined", () => {
     expect(service).toBeDefined();
+  });
+
+  it("should call eth handler", async () => {
+    const spy = jest.spyOn(
+      EthBlockWatcherTest.prototype,
+      "getBlockStatsAlerts"
+    );
+    await service.check("ETH");
+    expect(spy).toBeCalled();
+  });
+
+  it("should call btc handler", async () => {
+    const spy = jest.spyOn(
+      EthBlockWatcherTest.prototype,
+      "getBlockStatsAlerts"
+    );
+    await service.check("BTC");
+    expect(spy).toBeCalled();
+  });
+
+  it("should call trx handler", async () => {
+    const spy = jest.spyOn(
+      EthBlockWatcherTest.prototype,
+      "getBlockStatsAlerts"
+    );
+    await service.check("TRX");
+    expect(spy).toBeCalled();
+  });
+
+  it("should call dash handler", async () => {
+    const spy = jest.spyOn(
+      EthBlockWatcherTest.prototype,
+      "getBlockStatsAlerts"
+    );
+    await service.check("DASH");
+    expect(spy).toBeCalled();
+  });
+
+  it("should call dot handler", async () => {
+    const spy = jest.spyOn(
+      EthBlockWatcherTest.prototype,
+      "getBlockStatsAlerts"
+    );
+    await service.check("DOT");
+    expect(spy).toBeCalled();
+  });
+
+  it("should call ltc handler", async () => {
+    const spy = jest.spyOn(
+      EthBlockWatcherTest.prototype,
+      "getBlockStatsAlerts"
+    );
+    await service.check("LTC");
+    expect(spy).toBeCalled();
+  });
+  it("should call xrp handler", async () => {
+    const spy = jest.spyOn(
+      EthBlockWatcherTest.prototype,
+      "getBlockStatsAlerts"
+    );
+    await service.check("XRP");
+    expect(spy).toBeCalled();
   });
 });
