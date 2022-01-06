@@ -1,8 +1,8 @@
 import { HttpService } from "@nestjs/axios";
 import { ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
+import { Config } from "../testing-mocks/config";
 import { HttpServiceMock } from "../testing-mocks/http/http-service.mock";
-import { Config } from "../testing-mocks/queue/config";
 import { NotificationsService } from "./notifications.service";
 
 const testData = {
