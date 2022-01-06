@@ -6,10 +6,10 @@ import { BullModule } from "@nestjs/bull";
 import { QueueManagerModule } from "./queue-manager/queue-manager.module";
 import { SentryLoggerModule } from "./sentry-logger/sentry-logger.module";
 import { NotificationsModule } from "./notifications/notifications.module";
-import { ConfigCheckerModule } from "./config-checker/config-checker.module";
 import { BlockWatcherModule } from "./block-watcher/block-watcher.module";
 import { JobLockerService } from "./job-locker/job-locker.service";
 import { JobLockerModule } from "./job-locker/job-locker.module";
+import { ServiceExplorerModule } from "./service-explorer/service-explorer.module";
 
 @Module({
   imports: [
@@ -42,8 +42,8 @@ import { JobLockerModule } from "./job-locker/job-locker.module";
     QueueManagerModule.register(JobLockerService, JobLockerModule),
     SentryLoggerModule,
     NotificationsModule,
-    ConfigCheckerModule,
     BlockWatcherModule,
+    ServiceExplorerModule,
   ],
   controllers: [AppController],
   providers: [],
