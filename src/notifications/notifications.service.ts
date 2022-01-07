@@ -41,7 +41,7 @@ export class NotificationsService {
     }
     return {
       messageBody: message,
-      botIcon: this.config.get(NotificationParamsName.NOTIFICATION_BOT_ICON),
+      slack: null,
       channelName: this.config.get(
         NotificationParamsName.NOTIFICATION_CHANNEL_NAME
       ),
