@@ -7,7 +7,6 @@
     "^.+\\.(t|j)s$": "ts-jest"
   },
   "globals": {
-    "NODE_ENV": "test",
-    "COIN_NAME": "eth"
+    "NODE_ENV": "test"
   }
 }
