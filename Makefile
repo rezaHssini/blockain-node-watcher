@@ -4,7 +4,7 @@ define run-tests
 endef
 
 define build_common
-	docker build -t ${DOCKER_REGISTRY}/nanos/$(2):$(1) -f $(3) --build-arg TARGET_DIR=/app --build-arg SSH_PRIVATE_KEY="${SSH_PRIVATE_KEY}" --build-arg GOBIN=/.bin .
+	docker build -t ${DOCKER_REGISTRY}/nanos/$(2):$(1) -f $(3) --build-arg TARGET_DIR=/app --build-arg SSH_PRIVATE_KEY="" --build-arg GOBIN=/.bin .
 	docker tag ${DOCKER_REGISTRY}/nanos/$(2):$(1) $(2)_local_go:latest
 	docker save -o tmp-$(1)-$(2)-image.docker ${DOCKER_REGISTRY}/nanos/$(2):$(1)
 endef
