@@ -40,7 +40,7 @@ export abstract class BlockWatcherBaseClass implements IBlockWatcher {
     try {
       return await request(this.http, url);
     } catch (error) {
-      await this.notification.send(error?.message);
+      throw error;
     }
   }
   async getServiceBalancerBlockStats(): Promise<IBlockStat> {
@@ -49,7 +49,7 @@ export abstract class BlockWatcherBaseClass implements IBlockWatcher {
     try {
       response = await request(this.http, url);
     } catch (error) {
-      await this.notification.send(error?.message);
+      throw error;
     }
     if (!response) {
       throw new Error("Error in get last block");
@@ -80,7 +80,10 @@ export abstract class BlockWatcherBaseClass implements IBlockWatcher {
     }
     const alerts = Object.keys(alert).map((key) => {
       if (alert[key]?.length > 0) {
-        return this.notification.send(`${this.chain} : ${key} ${alert[key]}`);
+        return this.notification.send(
+          `${this.chain} : ${key} ${alert[key]}`,
+          key
+        );
       }
     });
     if (alerts.length === 0) {

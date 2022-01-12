@@ -11,12 +11,12 @@ export class NotificationsService {
     private readonly http: HttpService,
     private readonly config: ConfigService
   ) {}
-  async send(message: any): Promise<void> {
+  async send(message: any, key: string): Promise<void> {
     const url = this.config.get(NotificationParamsName.NOTIFICATIN_MS_URL);
     if (!url) {
       throw new Error("Can't send notification: URL is unknown.");
     }
-    const requestBody = this.getRequestBody(message);
+    const requestBody = this.getRequestBody(message, key);
     let response;
     const response$ = this.http.post(url, requestBody);
     try {
@@ -32,19 +32,21 @@ export class NotificationsService {
       );
     }
   }
-  private getRequestBody(message: string): NotificationDto {
-    const channel = this.config.get(
-      NotificationParamsName.NOTIFICATION_CHANNEL_NAME
-    );
-    if (!channel) {
-      throw new Error("Can't send notification: CHANNEL is unknown.");
-    }
+  private getRequestBody(message: string, key: string): NotificationDto {
+    const source =
+      this.config.get(NotificationParamsName.NOTIFICATION_SOURCE_NAME) ||
+      "watcher";
+
     return {
-      messageBody: message,
-      slack: null,
-      channelName: this.config.get(
-        NotificationParamsName.NOTIFICATION_CHANNEL_NAME
-      ),
+      message,
+      source,
+      topic: this.getTopic(key),
     };
+  }
+
+  private getTopic(key: string): string {
+    return key.toLowerCase() === "last"
+      ? "ms-delayed"
+      : "too-many-blocks-in-status";
   }
 }

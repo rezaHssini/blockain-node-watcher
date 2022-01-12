@@ -1,8 +1,7 @@
 export class NotificationDto {
-  messageBody: string;
-  slack?: Slack;
-  channelName: string;
-}
-class Slack {
-  botIcon?: string;
+  source: string;
+  topic: string;
+  message: string;
+  tags?: string;
+  description?: string;
 }
