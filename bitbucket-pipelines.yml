@@ -34,6 +34,7 @@ pipelines:
                 - pip
                 - docker
               script:
+                - git submodule update --init --recursive
                 # build dev image and notify to slack
                 - if make build-app ENV_NAME=dev ECR_NAME=blockchain-watcher DOCKERFILE_NAME=Dockerfile; then
                   make slack-notification MESSAGE="Image for blockchain-watcher was SUCCESSFULLY built.";
