@@ -82,7 +82,8 @@ export abstract class BlockWatcherBaseClass implements IBlockWatcher {
       if (alert[key]?.length > 0) {
         return this.notification.send(
           `${this.chain} : ${key} ${alert[key]}`,
-          key
+          key,
+          this.chain
         );
       }
     });
