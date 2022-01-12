@@ -1,7 +1,7 @@
 export class NotificationDto {
   source: string;
   topic: string;
-  message: string;
+  title: string;
   tags?: string;
   description?: string;
 }

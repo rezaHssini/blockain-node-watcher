@@ -18,6 +18,7 @@ export class NotificationsService {
     }
     const requestBody = this.getRequestBody(message, key);
     let response;
+
     const response$ = this.http.post(url, requestBody);
     try {
       response = await firstValueFrom(response$);
@@ -32,13 +33,13 @@ export class NotificationsService {
       );
     }
   }
-  private getRequestBody(message: string, key: string): NotificationDto {
+  private getRequestBody(title: string, key: string): NotificationDto {
     const source =
       this.config.get(NotificationParamsName.NOTIFICATION_SOURCE_NAME) ||
       "watcher";
 
     return {
-      message,
+      title,
       source,
       topic: this.getTopic(key),
     };
