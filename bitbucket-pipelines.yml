@@ -17,7 +17,7 @@ pipelines:
             - sonar-scanner -Dsonar.projectKey=${BITBUCKET_REPO_SLUG} -Dsonar.pullrequest.key=${BITBUCKET_PR_ID} -Dsonar.pullrequest.branch=${BITBUCKET_BRANCH} -Dsonar.pullrequest.base=${BITBUCKET_PR_DESTINATION_BRANCH}
   # Pipelines that run automatically on a commit to a branch
   branches:
-    develop:
+    dev:
       - step:
           name: SonarQube analysis
           image: sonarsource/sonar-scanner-cli:4.6
