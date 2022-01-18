@@ -61,16 +61,11 @@ export abstract class BlockWatcherBaseClass implements IBlockWatcher {
   }
 
   getServiceAddress(): string {
-    console.log(
-      "service : ",
-      `${this.serviceUri}/${this.chain.toLowerCase()}${SERVICE_ADDRESS_PATH}`
-    );
     return `${
       this.serviceUri
     }/${this.chain.toLowerCase()}${SERVICE_ADDRESS_PATH}`;
   }
   getServiceBalancerAddress(): string {
-    console.log("balancer : ", this.balancerUri + BALANCER_ADDRESS_PATH);
     return this.balancerUri + BALANCER_ADDRESS_PATH;
   }
   compare(value: number, max: number): string | null {
