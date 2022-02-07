@@ -18,7 +18,7 @@ define push_common
 endef
 
 define deploy_common
-    $(foreach i,$(services),aws ecs update-service --cluster nanos-crypto-$(1) --service nanos-$(i)-$(1) --force-new-deployment;)
+    $(foreach i,$(services),aws ecs update-service --cluster nanos-$(1) --service nanos-$(i)-$(1) --force-new-deployment;)
 endef
 
 services = bc-watcher
