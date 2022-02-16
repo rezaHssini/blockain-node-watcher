@@ -4,6 +4,7 @@ export async function request(http, url): Promise<any> {
   if (!url) {
     throw new Error("Can't send request: URL is unknown.");
   }
+
   let response;
   const response$ = http.get(url);
   try {
