@@ -17,7 +17,7 @@ pipelines:
             - sonar-scanner -Dsonar.projectKey=${BITBUCKET_REPO_SLUG} -Dsonar.pullrequest.key=${BITBUCKET_PR_ID} -Dsonar.pullrequest.branch=${BITBUCKET_BRANCH} -Dsonar.pullrequest.base=${BITBUCKET_PR_DESTINATION_BRANCH}
   # Pipelines that run automatically on a commit to a branch
   branches:
-    develop:
+    dev:
       - step:
           name: SonarQube analysis
           image: sonarsource/sonar-scanner-cli:4.6
@@ -56,6 +56,50 @@ pipelines:
                 # deploy app to dev and notify to slack
                 - eval $(aws ecr get-login --region ${AWS_DEFAULT_REGION} --no-include-email)
                 - if make push-app ENV_NAME=dev ECR_NAME=blockchain-watcher && make deploy-app ENV_NAME=dev; then
+                  make slack-notification MESSAGE="deploy to blockchain-watcher was SUCCESSFULL.";
+                  else
+                  make slack-notification MESSAGE="deploy to blockchain-watcher was FAILED.";
+                  exit 1;
+                  fi
+    qa:
+      - step:
+          name: SonarQube analysis
+          image: sonarsource/sonar-scanner-cli:4.6
+          caches:
+            - sonar
+          script:
+            - sonar-scanner -Dsonar.projectKey=${BITBUCKET_REPO_SLUG} -Dsonar.branch.name=${BITBUCKET_BRANCH}
+      - parallel:
+          - step:
+              name: Build blockchain-watcher qa
+              deployment: build-bc-watcher-qa
+              image: python:3.9
+              caches:
+                - pip
+                - docker
+              script:
+                - git submodule update --init --recursive
+                # build qa image and notify to slack
+                - if make build-app ENV_NAME=qa ECR_NAME=blockchain-watcher DOCKERFILE_NAME=Dockerfile; then
+                  make slack-notification MESSAGE="Image for blockchain-watcher was SUCCESSFULLY built.";
+                  else
+                  make slack-notification MESSAGE="Build of image for blockchain-watcher was FAILED.";
+                  exit 1;
+                  fi
+              artifacts:
+                - tmp-qa-blockchain-watcher-image.docker
+      - parallel:
+          - step:
+              name: Auto-deploy blockchain-watcher to qa
+              deployment: deploy-bc-watcher-qa
+              image: python:3.9
+              caches:
+                - pip
+              script:
+                - pip install awscli --upgrade
+                # deploy app to qa and notify to slack
+                - eval $(aws ecr get-login --region ${AWS_DEFAULT_REGION} --no-include-email)
+                - if make push-app ENV_NAME=qa ECR_NAME=blockchain-watcher && make deploy-app ENV_NAME=qa; then
                   make slack-notification MESSAGE="deploy to blockchain-watcher was SUCCESSFULL.";
                   else
                   make slack-notification MESSAGE="deploy to blockchain-watcher was FAILED.";

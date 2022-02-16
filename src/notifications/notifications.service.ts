@@ -47,6 +47,7 @@ export class NotificationsService {
       description,
       source,
       topic: this.getTopic(key),
+      tags: chain,
     };
   }
 
