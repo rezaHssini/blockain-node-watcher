@@ -43,6 +43,8 @@ export abstract class BlockWatcherBaseClass implements IBlockWatcher {
     try {
       return await request(this.http, url);
     } catch (error) {
+      const message = error.message ? error.message : error;
+      await this.notification.send(message, 'down', this.chain);
       throw error;
     }
   }

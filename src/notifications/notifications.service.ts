@@ -53,12 +53,12 @@ export class NotificationsService {
   private getTopic(key: string): string {
     return key.toLowerCase() === "last"
       ? "ms-delayed"
-      : "too-many-blocks-in-status";
+      : key.toLowerCase() === "down" ? "service-down" :  "too-many-blocks-in-status";
   }
 
   private getTitle(chain: string, key: string): string {
-    return key === "last"
+    return key.toLowerCase() === "last"
       ? `${chain.toUpperCase()} Service delay`
-      : `${chain.toUpperCase()} too many blocks`;
+      : key.toLowerCase() === "down" ? `${chain.toUpperCase()} Service is down` : `${chain.toUpperCase()} too many blocks`;
   }
 }
