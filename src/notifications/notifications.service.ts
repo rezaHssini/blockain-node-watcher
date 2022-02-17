@@ -18,7 +18,6 @@ export class NotificationsService {
     }
     const requestBody = this.getRequestBody(message, key, chain);
     let response;
-
     const response$ = this.http.post(url, requestBody);
     try {
       response = await firstValueFrom(response$);
@@ -52,14 +51,28 @@ export class NotificationsService {
   }
 
   private getTopic(key: string): string {
-    return key.toLowerCase() === "last"
-      ? "ms-delayed"
-      : "too-many-blocks-in-status";
+    switch(key.toLowerCase()){
+      case "last" :
+        return "ms-delayed"
+      case "down" :
+        return "service-down"
+      case "balancer-down" :
+        return "balancer-down"
+      default:
+        return "too-many-blocks-in-status"
+    }
   }
 
   private getTitle(chain: string, key: string): string {
-    return key === "last"
-      ? `${chain.toUpperCase()} Service delay`
-      : `${chain.toUpperCase()} too many blocks`;
+      switch (key.toLowerCase()) {
+        case "last" :
+          return `${chain.toUpperCase()} Service delay`
+        case "down" :
+          return `${chain.toUpperCase()} Service is down`
+        case "balancer-down" :
+          return `${chain.toUpperCase()} Balancer is down`
+        default:
+          return `${chain.toUpperCase()} too many blocks`
+      }
   }
 }
